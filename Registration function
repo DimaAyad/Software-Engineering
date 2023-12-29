@@ -1,0 +1,155 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: RegistrationScreen(),
+    );
+  }
+}
+
+class RegistrationScreen extends StatefulWidget {
+  @override
+  _RegistrationScreenState createState() => _RegistrationScreenState();
+}
+
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: usernameController,
+              decoration: InputDecoration(labelText: 'Username'),
+            ),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'Password'),
+            ),
+            TextField(
+              controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(labelText: 'Email Address'),
+            ),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(labelText: 'Phone Number'),
+            ),
+            TextField(
+              controller: cityController,
+              decoration: InputDecoration(labelText: 'City'),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                _register();
+              },
+              child: Text('Sign Up'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _register() {
+    String username = usernameController.text.trim();
+    String password = passwordController.text.trim();
+    String email = emailController.text.trim();
+    String phone = phoneController.text.trim();
+    String city = cityController.text.trim();
+
+    // Main success scenario
+    if (username.isNotEmpty &&
+        password.isNotEmpty &&
+        email.isNotEmpty &&
+        phone.isNotEmpty &&
+        city.isNotEmpty) {
+      // Perform registration logic here
+      // Check email and username availability, password strength, and save to the database
+      if (_isEmailRegistered(email)) {
+        _showMessage('The email you’ve entered is already registered.');
+      } else if (_isUsernameRegistered(username)) {
+        _showMessage('Username already exists.');
+      } else if (!_isStrongPassword(password)) {
+        _showMessage(
+            'Password must be at least 8 characters long and include a mix of letters, numbers, and symbols.');
+      } else if (!_isValidPhoneNumber(phone)) {
+        _showMessage(
+            'Invalid phone number format. Please enter a valid phone number.');
+      } else {
+        // Save user information to the database
+        _showMessage('Registration successful!');
+        // You can navigate to another screen or perform other actions here
+      }
+    } else {
+      // Handle exceptions
+      _showMessage('Please fill in all the required fields.');
+    }
+  }
+
+  bool _isEmailRegistered(String email) {
+    // Add your logic to check if the email is already registered
+    // For simplicity, let's assume any non-empty email is registered
+    return email.isNotEmpty;
+  }
+
+  bool _isUsernameRegistered(String username) {
+    // Add your logic to check if the username is already registered
+    // For simplicity, let's assume any non-empty username is registered
+    return username.isNotEmpty;
+  }
+
+  bool _isStrongPassword(String password) {
+    // Add your logic to check the strength of the password
+    // For simplicity, let's assume any non-empty password is strong
+    return password.isNotEmpty;
+  }
+
+  bool _isValidPhoneNumber(String phone) {
+    // Add your logic to check the validity of the phone number
+    // For simplicity, let's assume any non-empty phone number is valid
+    return phone.isNotEmpty;
+  }
+
+  void _showMessage(String message) {
+    // Show a dialog or a snackbar with the provided message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Registration Status'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
