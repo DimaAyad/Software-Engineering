@@ -1,0 +1,1 @@
+The purpose of this Software Requirements Specification (SRS) document is to present a clear and thorough explanation of our Railway Tracking and Arrival Time Prediction application. The features, interface, and purpose of the application, as well as its test cases, performance, and constraints, will all be included in this document.
