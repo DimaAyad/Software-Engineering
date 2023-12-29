@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SearchTrainsScreen(),
+    );
+  }
+}
+
+class SearchTrainsScreen extends StatefulWidget {
+  @override
+  _SearchTrainsScreenState createState() => _SearchTrainsScreenState();
+}
+
+class _SearchTrainsScreenState extends State<SearchTrainsScreen> {
+  TextEditingController originController = TextEditingController();
+  TextEditingController destinationController = TextEditingController();
+  bool isRoundTrip = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Search Trains'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              children: [
+                Text('One-Way Trip'),
+                Switch(
+                  value: !isRoundTrip,
+                  onChanged: (value) {
+                    setState(() {
+                      isRoundTrip = !value;
+                    });
+                  },
+                ),
+                Text('Round Trip'),
+              ],
+            ),
+            TextField(
+              controller: originController,
+              decoration: InputDecoration(labelText: 'Origin'),
+            ),
+            TextField(
+              controller: destinationController,
+              decoration: InputDecoration(labelText: 'Destination'),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                _searchTrains();
+              },
+              child: Text('Search Trains'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _searchTrains() {
+    String origin = originController.text.trim();
+    String destination = destinationController.text.trim();
+
+    // Main success scenario
+    if (origin.isNotEmpty && destination.isNotEmpty) {
+      // Perform search logic here
+      // If successful, navigate to the results page or perform necessary actions
+      _showMessage('Results page will be displayed.');
+    } else {
+      // Handle exceptions
+      if (origin.isEmpty || destination.isEmpty) {
+        // Exception 2: Missing information
+        _showMessage('Please fill in all the required information.');
+      } else {
+        // Exception 1: Invalid information
+        _showMessage('Invalid Information Entered');
+      }
+    }
+  }
+
+  void _showMessage(String message) {
+    // Show a dialog or a snackbar with the provided message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Search Status'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
