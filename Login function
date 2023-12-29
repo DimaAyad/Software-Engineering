@@ -1,0 +1,120 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: LoginScreen(),
+    );
+  }
+}
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool accountDeleted = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: usernameController,
+              decoration: InputDecoration(labelText: 'Username'),
+            ),
+            SizedBox(height: 16.0),
+            TextField(
+              controller: passwordController,
+              obscureText: true,
+              decoration: InputDecoration(labelText: 'Password'),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                _login();
+              },
+              child: Text('Log In'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _login() {
+    String username = usernameController.text.trim();
+    String password = passwordController.text.trim();
+
+    // Main success scenario
+    if (username.isNotEmpty && password.isNotEmpty && !accountDeleted) {
+      // Perform login logic here
+      // If successful, navigate to the next screen or perform necessary actions
+      print('Login successful!');
+    } else {
+      // Handle exceptions
+      if (username.isEmpty || password.isEmpty) {
+        // Exception 1: Empty fields
+        _showMessage('Please fill in all required fields.');
+      } else if (!isValidUsername(username)) {
+        // Exception 2: Invalid username
+        _showMessage('The username is invalid.');
+      } else if (!isValidPassword(password)) {
+        // Exception 3: Invalid password
+        _showMessage('Invalid password.');
+      } else if (accountDeleted) {
+        // Exception 4: Account is deactivated
+        _showMessage(
+            'Your account has been deleted. If you believe this is an error, please contact support for assistance.');
+      }
+    }
+  }
+
+  bool isValidUsername(String username) {
+    // Add your validation logic here
+    // For simplicity, let's assume any non-empty username is valid
+    return username.isNotEmpty;
+  }
+
+  bool isValidPassword(String password) {
+    // Add your validation logic here
+    // For simplicity, let's assume any non-empty password is valid
+    return password.isNotEmpty;
+  }
+
+  void _showMessage(String message) {
+    // Show a dialog or a snackbar with the provided message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
