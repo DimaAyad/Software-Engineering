@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BookTrainScreen(),
+    );
+  }
+}
+
+class BookTrainScreen extends StatefulWidget {
+  @override
+  _BookTrainScreenState createState() => _BookTrainScreenState();
+}
+
+class _BookTrainScreenState extends State<BookTrainScreen> {
+  TextEditingController paymentController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Book Train'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: paymentController,
+              decoration: InputDecoration(labelText: 'Payment Information'),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () {
+                _confirmBooking();
+              },
+              child: Text('Confirm'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _confirmBooking() {
+    String paymentInformation = paymentController.text.trim();
+
+    // Main success scenario
+    if (paymentInformation.isNotEmpty) {
+      // Perform booking logic here
+      // If successful, navigate to the next screen or perform necessary actions
+      _showMessage('Train booked successfully!');
+      // You can include code to track the train in real-time, display train details,
+      // and receive announcements concerning the trip here
+    } else {
+      // Handle exceptions
+      if (paymentInformation.isEmpty) {
+        // Exception 2: Missing payment information
+        _showMessage('Please fill in all the required information.');
+      } else {
+        // Exception 1: Invalid payment information
+        _showMessage('Invalid Payment Information Entered');
+      }
+    }
+  }
+
+  void _showMessage(String message) {
+    // Show a dialog or a snackbar with the provided message
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Booking Status'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
